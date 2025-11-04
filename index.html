@@ -1,316 +1,300 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2022.1">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sticky Scrollytelling</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+ 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+        }
+ 
+        /* Container for the scrolly section */
+        .scrolly-container {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+ 
+        /* Sticky graphic that stays in place */
+        .sticky-graphic {
+            position: sticky;
+            top: 10vh;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+ 
+        /* SVG container for animations */
+        .viz-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+ 
+        /* Scrolling text steps */
+        .steps {
+            position: relative;
+        }
+ 
+        .step {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            padding: 2rem;
+            opacity: 0.3;
+            transition: opacity 0.5s ease;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+        }
+ 
+        .step.active {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.05);
+        }
+ 
+        .step-content {
+            max-width: 500px;
+        }
+ 
+        .step h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+ 
+        .step p {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #b0b0b0;
+        }
+ 
+        /* Hero section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+        }
+ 
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            margin-bottom: 1rem;
+        }
+ 
+        .hero p {
+            font-size: 1.5rem;
+            opacity: 0.9;
+        }
+ 
+        /* Outro section */
+        .outro {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+            padding: 2rem;
+        }
+ 
+        /* SVG shapes that will animate */
+        .circle {
+            transition: all 0.8s ease;
+        }
+ 
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .scrolly-container {
+                grid-template-columns: 1fr;
+            }
+ 
+            .sticky-graphic {
+                position: relative;
+                height: 50vh;
+                top: 0;
+            }
+ 
+            .step {
+                min-height: 60vh;
+            }
+        }
+    </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Sticky Scrollytelling&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>* {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-sizing: border-box;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #0a0a0a;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #ffffff;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Container for the scrolly section */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.scrolly-container {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: grid;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>grid-template-columns: 1fr 1fr;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-width: 1400px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0 auto;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Sticky graphic that stays in place */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.sticky-graphic {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: sticky;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>top: 10vh;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 80vh;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>overflow: hidden;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* SVG container for animations */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.viz-container {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Scrolling text steps */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.steps {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.step {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>min-height: 80vh;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>opacity: 0.3;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: opacity 0.5s ease;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(255, 255, 255, 0.02);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.step.active {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>opacity: 1;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: rgba(255, 255, 255, 0.05);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.step-content {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>max-width: 500px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.step h2 {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #667eea;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.step p {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.2rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>line-height: 1.8;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: #b0b0b0;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Hero section */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.hero {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>min-height: 100vh;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.hero h1 {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: clamp(3rem, 8vw, 5rem);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 1rem;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.hero p {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.5rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>opacity: 0.9;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Outro section */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.outro {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>min-height: 100vh;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* SVG shapes that will animate */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.circle {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: all 0.8s ease;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Mobile responsive */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>@media (max-width: 768px) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>.scrolly-container {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>grid-template-columns: 1fr;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>.sticky-graphic {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>position: relative;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>height: 50vh;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>top: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>.step {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>min-height: 60vh;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;section class="hero"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h1&gt;Sticky Scrollytelling&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p&gt;Watch the visualization change as you scroll through the story&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div class="scrolly-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Sticky graphic that stays in place --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="sticky-graphic"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="viz-container"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;svg id="viz" width="500" height="500" viewBox="0 0 500 500"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;!-- Circles that will animate --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;circle class="circle" cx="250" cy="250" r="50" fill="#ffffff" opacity="0.9"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;circle class="circle" cx="150" cy="250" r="30" fill="#f093fb" opacity="0"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;circle class="circle" cx="350" cy="250" r="30" fill="#f5576c" opacity="0"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;circle class="circle" cx="250" cy="150" r="30" fill="#71b280" opacity="0"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;circle class="circle" cx="250" cy="350" r="30" fill="#667eea" opacity="0"/&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/svg&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;!-- Scrolling text steps --&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="steps"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="step" data-step="0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="step-content"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h2&gt;Introduction&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Start with a simple visualization. In this case, we begin with a single circle. As you scroll, watch how it transforms.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="step" data-step="1"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="step-content"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h2&gt;Step One: Expansion&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;New elements appear around the center. Each circle represents a different data point or concept in your story.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="step" data-step="2"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="step-content"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h2&gt;Step Two: Growth&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;The visualization evolves. Notice how the circles grow larger, emphasizing their importance in the narrative.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="step" data-step="3"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="step-content"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h2&gt;Step Three: Distribution&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;Elements spread out, showing relationships and connections. This is where your data story becomes clear.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="step" data-step="4"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;div class="step-content"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;h2&gt;Conclusion&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>&lt;p&gt;The final state of your visualization. All elements come together to tell the complete story.&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;section class="outro"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h1&gt;The End&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;p&gt;You've reached the end of this scrollytelling experience&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Get all steps and circles</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const steps = document.querySelectorAll('.step');</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const circles = document.querySelectorAll('.circle');</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Define what happens at each step</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const animations = {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>0: () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>// Initial state - just center circle</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[0].setAttribute('r', '50');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[0].setAttribute('opacity', '0.9');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[1].setAttribute('opacity', '0');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[2].setAttribute('opacity', '0');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[3].setAttribute('opacity', '0');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[4].setAttribute('opacity', '0');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>1: () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>// Show surrounding circles</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[0].setAttribute('r', '40');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[1].setAttribute('opacity', '0.8');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[2].setAttribute('opacity', '0.8');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[3].setAttribute('opacity', '0.8');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[4].setAttribute('opacity', '0.8');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>2: () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>// Grow all circles</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[0].setAttribute('r', '60');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[1].setAttribute('r', '50');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[2].setAttribute('r', '50');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[3].setAttribute('r', '50');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[4].setAttribute('r', '50');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>3: () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>// Spread out circles</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[1].setAttribute('cx', '100');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[2].setAttribute('cx', '400');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[3].setAttribute('cy', '100');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[4].setAttribute('cy', '400');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>},</p>
-<p class="p1"><span class="Apple-converted-space">            </span>4: () =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>// Final state - all equal size</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[0].setAttribute('r', '50');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[1].setAttribute('r', '50');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[2].setAttribute('r', '50');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[3].setAttribute('r', '50');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[4].setAttribute('r', '50');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[1].setAttribute('cx', '150');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[2].setAttribute('cx', '350');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[3].setAttribute('cy', '150');</p>
-<p class="p1"><span class="Apple-converted-space">                </span>circles[4].setAttribute('cy', '350');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Intersection Observer to detect which step is active</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const observerOptions = {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>root: null,</p>
-<p class="p1"><span class="Apple-converted-space">            </span>rootMargin: '-40% 0px -40% 0px',</p>
-<p class="p1"><span class="Apple-converted-space">            </span>threshold: 0</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>const observer = new IntersectionObserver((entries) =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>entries.forEach(entry =&gt; {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>if (entry.isIntersecting) {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>// Remove active class from all steps</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>steps.forEach(s =&gt; s.classList.remove('active'));</p>
-<p class="p2"><span class="Apple-converted-space">                    </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>// Add active class to current step</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>entry.target.classList.add('active');</p>
-<p class="p2"><span class="Apple-converted-space">                    </span></p>
-<p class="p1"><span class="Apple-converted-space">                    </span>// Get step number and run animation</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>const stepNum = entry.target.dataset.step;</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>if (animations[stepNum]) {</p>
-<p class="p1"><span class="Apple-converted-space">                        </span>animations[stepNum]();</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>}</p>
-<p class="p1"><span class="Apple-converted-space">                </span>}</p>
-<p class="p1"><span class="Apple-converted-space">            </span>});</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}, observerOptions);</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Observe all steps</p>
-<p class="p1"><span class="Apple-converted-space">        </span>steps.forEach(step =&gt; observer.observe(step));</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>// Initialize with first animation</p>
-<p class="p1"><span class="Apple-converted-space">        </span>animations[0]();</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+    <section class="hero">
+        <div>
+            <h1>Sticky Scrollytelling</h1>
+            <p>Watch the visualization change as you scroll through the story</p>
+        </div>
+    </section>
+ 
+    <div class="scrolly-container">
+        <!-- Sticky graphic that stays in place -->
+        <div class="sticky-graphic">
+            <div class="viz-container">
+                <svg id="viz" width="500" height="500" viewBox="0 0 500 500">
+                    <!-- Circles that will animate -->
+                    <circle class="circle" cx="250" cy="250" r="50" fill="#ffffff" opacity="0.9"/>
+                    <circle class="circle" cx="150" cy="250" r="30" fill="#f093fb" opacity="0"/>
+                    <circle class="circle" cx="350" cy="250" r="30" fill="#f5576c" opacity="0"/>
+                    <circle class="circle" cx="250" cy="150" r="30" fill="#71b280" opacity="0"/>
+                    <circle class="circle" cx="250" cy="350" r="30" fill="#667eea" opacity="0"/>
+                </svg>
+            </div>
+        </div>
+ 
+        <!-- Scrolling text steps -->
+        <div class="steps">
+            <div class="step" data-step="0">
+                <div class="step-content">
+                    <h2>Introduction</h2>
+                    <p>Start with a simple visualization. In this case, we begin with a single circle. As you scroll, watch how it transforms.</p>
+                </div>
+            </div>
+ 
+            <div class="step" data-step="1">
+                <div class="step-content">
+                    <h2>Step One: Expansion</h2>
+                    <p>New elements appear around the center. Each circle represents a different data point or concept in your story.</p>
+                </div>
+            </div>
+ 
+            <div class="step" data-step="2">
+                <div class="step-content">
+                    <h2>Step Two: Growth</h2>
+                    <p>The visualization evolves. Notice how the circles grow larger, emphasizing their importance in the narrative.</p>
+                </div>
+            </div>
+ 
+            <div class="step" data-step="3">
+                <div class="step-content">
+                    <h2>Step Three: Distribution</h2>
+                    <p>Elements spread out, showing relationships and connections. This is where your data story becomes clear.</p>
+                </div>
+            </div>
+ 
+            <div class="step" data-step="4">
+                <div class="step-content">
+                    <h2>Conclusion</h2>
+                    <p>The final state of your visualization. All elements come together to tell the complete story.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <section class="outro">
+        <div>
+            <h1>The End</h1>
+            <p>You've reached the end of this scrollytelling experience</p>
+        </div>
+    </section>
+ 
+    <script>
+        // Get all steps and circles
+        const steps = document.querySelectorAll('.step');
+        const circles = document.querySelectorAll('.circle');
+ 
+        // Define what happens at each step
+        const animations = {
+            0: () => {
+                // Initial state - just center circle
+                circles[0].setAttribute('r', '50');
+                circles[0].setAttribute('opacity', '0.9');
+                circles[1].setAttribute('opacity', '0');
+                circles[2].setAttribute('opacity', '0');
+                circles[3].setAttribute('opacity', '0');
+                circles[4].setAttribute('opacity', '0');
+            },
+            1: () => {
+                // Show surrounding circles
+                circles[0].setAttribute('r', '40');
+                circles[1].setAttribute('opacity', '0.8');
+                circles[2].setAttribute('opacity', '0.8');
+                circles[3].setAttribute('opacity', '0.8');
+                circles[4].setAttribute('opacity', '0.8');
+            },
+            2: () => {
+                // Grow all circles
+                circles[0].setAttribute('r', '60');
+                circles[1].setAttribute('r', '50');
+                circles[2].setAttribute('r', '50');
+                circles[3].setAttribute('r', '50');
+                circles[4].setAttribute('r', '50');
+            },
+            3: () => {
+                // Spread out circles
+                circles[1].setAttribute('cx', '100');
+                circles[2].setAttribute('cx', '400');
+                circles[3].setAttribute('cy', '100');
+                circles[4].setAttribute('cy', '400');
+            },
+            4: () => {
+                // Final state - all equal size
+                circles[0].setAttribute('r', '50');
+                circles[1].setAttribute('r', '50');
+                circles[2].setAttribute('r', '50');
+                circles[3].setAttribute('r', '50');
+                circles[4].setAttribute('r', '50');
+                circles[1].setAttribute('cx', '150');
+                circles[2].setAttribute('cx', '350');
+                circles[3].setAttribute('cy', '150');
+                circles[4].setAttribute('cy', '350');
+            }
+        };
+ 
+        // Intersection Observer to detect which step is active
+        const observerOptions = {
+            root: null,
+            rootMargin: '-40% 0px -40% 0px',
+            threshold: 0
+        };
+ 
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Remove active class from all steps
+                    steps.forEach(s => s.classList.remove('active'));
+                    
+                    // Add active class to current step
+                    entry.target.classList.add('active');
+                    
+                    // Get step number and run animation
+                    const stepNum = entry.target.dataset.step;
+                    if (animations[stepNum]) {
+                        animations[stepNum]();
+                    }
+                }
+            });
+        }, observerOptions);
+ 
+        // Observe all steps
+        steps.forEach(step => observer.observe(step));
+ 
+        // Initialize with first animation
+        animations[0]();
+    </script>
 </body>
 </html>
